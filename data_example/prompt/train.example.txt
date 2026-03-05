@@ -1,0 +1,71 @@
+[SYSTEM]
+You are an expert for autonomous driving perception and decision-making reasoning, specializing in refined road scene understanding and state machine maintenance through visual sequences.
+Your task is to analyze the state transition between a **Previous Frame** and a **Current Frame** to judge the road state and lane-change feasibility.
+### [Important Definition Notes]
+1.**Lane Definition**: A lane refers to a motor vehicle lane in the current driving direction, excluding oncoming lanes, non-motorized lanes, or emergency lanes.
+2. **Ego-Vehicle Position**: Numbered from left to right, with the leftmost motor vehicle lane designated as lane 1.
+3. **Lane Change Feasibility Dimensions**:
+   - Structural: Restricted by road boundaries, markings (solid/dashed), guardrails, curbs, etc.
+   - Vehicle: Blocked by adjacent vehicles (occupying, paralleling, or approaching).
+   - Obstacle: Blocked by pedestrians, non-motorized vehicles, construction, roadblocks, etc.
+4. **Comprehensive Feasibility Judgment**: 
+"yes" ONLY if structural, vehicle, and obstacle dimensions for that direction are all "yes"; otherwise, it is "no".
+### [Fundamental Decision Rules] 
+1. **Lane Count Calculation**:
+   - Identify from "variable lane signs" or ground arrows if present.
+   - Otherwise, Lane Count = Number of same-direction separators + 1 (exclude road boundaries/curbs/non-motor lanes).
+2. **Ego Position Calculation**:
+   - Indexed from 1 starting at the leftmost lane.
+   - During a lane change, the lane with >50% vehicle occupancy is the current lane.
+3. **Feasibility Logic**: Strictly apply the 3-dimension AND logic for the "all" field.
+### [Reasoning Workflow]
+You must conduct reasoning strictly based on image content and the provided previous state:
+- **Step 1: Global Scene Observation**: 
+Describe road type, boundaries, markings (color/type), traffic distribution, and obstacles.
+- **Step 2: Temporal & Dynamic Analysis**:     
+- Compare images to identify ego-motion and lateral shifts. 
+- Prioritize stability: unless clear evidence of change exists, maintain the previous state. 
+- Capture dynamic triggers: newly appearing objects or marking transitions (e.g., solid to dashed).
+**Step 3: Logical Deduction**: 
+Integrate visual changes with the Previous State to derive the Current State. If the Previous State was logically flawed, deduce correctly based on visual evidence.
+[USER]
+<image> <image>
+You are presented with two consecutive road scene images. 
+The first is the **Previous Frame**, and the second is the **Current Frame**.
+[Previous State]:
+{"lane_count": 3,
+"ego_lane_index": 2,
+"lane_changeability": 
+{"struct": {"left": "yes","right": "yes"},
+"vehicle": {"left": "yes","right": "yes"},
+"obstacle": {"left": "yes","right": "yes"},
+"all": {"left": "yes","right": "yes"}}}
+Please analyze the transition from the Previous Frame to the Current Frame to determine the current state.
+### [Output Format Requirements]
+You must output content in strict accordance with the following order:
+1. Enclose your thinking process with <think> and </think>. The thinking process must include:
+- **Observation**: Objective description of the current scene (Step 1). 
+- **Temporal Analysis**: Comparison between frames and incremental changes (Step 2).
+- **Reasoning**: Sequential logic to derive lane count, ego position, and feasibility (Step 3).
+2. After </think>, output only the final result as a JSON object:
+- No extra text allowed. Do not modify field names.
+- Feasibility judgments must use "yes" or "no".
+The final result JSON format is:
+{"lane_count": number,
+"ego_lane_index": number,
+"lane_changeability": 
+{"struct": {"left": "yes/no","right": "yes/no"},
+"vehicle": {"left": "yes/no","right": "yes/no"},
+"obstacle": {"left": "yes/no","right": "yes/no"},
+"all": {"left": "yes/no","right": "yes/no"}}}
+[ASSISTANT]
+<think>
+Observation: The scene is a multi-lane urban arterial with a planted median/curb on the far left and a guardrail/shoulder on the far right. Two dashed white lane separators are visible in the ego direction, forming three same-direction motor-vehicle lanes. The ego vehicle is centered between the two dashed separators (middle lane). Traffic ahead includes a white sedan in the left lane and a motorcycle in the ego lane; the right lane appears open nearby with a bus farther ahead near the right side. No pedestrians, bicycles, cones, or construction barriers are present in the adjacent-lane areas.\n\nTemporal Analysis: From the previous frame to the current frame, the camera viewpoint advances slightly forward with no noticeable lateral drift: the ego vehicle remains aligned with the middle lane and does not straddle or cross either dashed lane line. The relative positions of the white sedan (front-left) and the motorcycle (ahead in-lane) remain stable, and no new vehicles cut in from either side. Lane markings remain dashed on both sides of the ego lane, and road boundaries (left curb/median and right guardrail) remain unchanged.\n\nReasoning: Lane count: In the current direction, there are two same-direction dashed lane separators visible, which implies 3 lanes (2 separators + 1). Ego lane index: The ego vehicle is between the left dashed separator (between left and middle lanes) and the right dashed separator (between middle and right lanes), so it is in lane 2 (middle lane). Lane-change feasibility—Structural: Both adjacent boundaries of the ego lane are dashed white lines, indicating lane changes are permitted to both left and right; the ego is not in the leftmost/rightmost lane and there are no barriers blocking a lateral move. Vehicle dimension: The left lane has a white sedan ahead but with sufficient forward separation and no vehicle immediately alongside; the right lane has no vehicle immediately adjacent (the bus is farther ahead), so neither side is blocked by a nearby vehicle. Obstacle dimension: No pedestrians, cyclists, parked vehicles intruding, or roadwork/blocked areas are present in the adjacent lanes, so there is no obstacle preventing a lane change. Therefore, since Struct=yes, Vehicle=yes, and Obstacle=yes for both directions, the overall feasibility is yes to both left and right.
+</think>
+{"lane_count": 3,
+"ego_lane_index": 2,
+"lane_changeability": 
+{"struct": {"left": "yes","right": "yes"},
+"vehicle": {"left": "yes","right": "yes"},
+"obstacle": {"left": "yes","right": "yes"},
+"all": {"left": "yes","right": "yes"}}}
