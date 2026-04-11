@@ -1,5 +1,7 @@
 # RoadState-VLM
 
+[Update] The bad bases are put in the paper folder.
+
 > **Neuro-Symbolic Structured Road Perception via Geometric Chain-of-Thought and Discrete State Transitions**
 
 [![Paper](https://img.shields.io/badge/Paper-KDD%202026-blue)](https://github.com/eadst/KDD-2026-RoadState-VLM)
