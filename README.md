@@ -4,16 +4,16 @@
 
 > **Neuro-Symbolic Structured Road Perception via Geometric Chain-of-Thought and Discrete State Transitions**
 
-[![Paper](https://img.shields.io/badge/Paper-CIKM%202026-blue)](https://github.com/eadst/CIKM-2026-RoadState-VLM)
+[![Paper](https://img.shields.io/badge/Paper-IAAI%2027-blue)](https://github.com/eadst/IAAI-2027-RoadState-VLM)
 [![Model](https://img.shields.io/badge/Base%20Model-Qwen3--VL--8B--Thinking-orange)](https://huggingface.co/Qwen/Qwen3-VL-8B-Thinking)
 [![Framework](https://img.shields.io/badge/Framework-LlamaFactory-green)](https://github.com/hiyouga/LLaMA-Factory)
 [![Status](https://img.shields.io/badge/Status-Under%20Review-yellow)]()
 
 This repository accompanies the paper:
 
-**RoadState-VLM: Neuro-Symbolic Structured Road Perception via Geometric Chain-of-Thought and Discrete State Transitions** *(CIKM 2026, under review)*
+**RoadState-VLM: Neuro-Symbolic Structured Road Perception via Geometric Chain-of-Thought and Discrete State Transitions** *(IAAI 2027, under review)*
 
-📦 Repository: **https://github.com/eadst/CIKM-2026-RoadState-VLM**
+📦 Repository: **https://github.com/eadst/IAAI-2027-RoadState-VLM**
 
 ---
 
@@ -206,11 +206,11 @@ The `data_example/` directory contains:
 If you use this work before formal publication, please cite the preprint or reference the GitHub repository:
 
 ```
-@misc{roadstate-vlm-2026,
+@misc{roadstate-vlm-2027,
   title  = {RoadState-VLM: Neuro-Symbolic Structured Road Perception via
              Geometric Chain-of-Thought and Discrete State Transitions},
-  year   = {2026},
-  note   = {CIKM 2026, under review. \url{https://github.com/eadst/CIKM-2026-RoadState-VLM}}
+  year   = {2027},
+  note   = {IAAI 2027, under review. \url{https://github.com/eadst/IAAI-2027-RoadState-VLM}}
 }
 ```
 
